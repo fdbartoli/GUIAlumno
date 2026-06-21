@@ -6,14 +6,47 @@ package gui.alumnogui;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author g.guzman
- */
 public class AlumnoDTO {
+
     private String dni;
     private String nombre;
+    private String apellido;
+    private LocalDate fecNac;
     private LocalDate fecIng;
+    private double promedio;
+    private char estado;
+
+    public double getPromedio() {
+        return promedio;
+    }
+
+    public void setPromedio(double promedio) {
+        this.promedio = promedio;
+    }
+
+    public LocalDate getFecNac() {
+        return fecNac;
+    }
+
+    public void setFecNac(LocalDate fecNac) {
+        this.fecNac = fecNac;
+    }
+
+    public String getApellido() {
+        return apellido;
+    }
+
+    public void setApellido(String apellido) {
+        this.apellido = apellido;
+    }
+
+    public char getEstado() {
+        return estado;
+    }
+
+    public void setEstado(char estado) {
+        this.estado = estado;
+    }
 
     public String getDni() {
         return dni;
@@ -39,5 +72,4 @@ public class AlumnoDTO {
         this.fecIng = fecIng;
     }
 
-    
 }

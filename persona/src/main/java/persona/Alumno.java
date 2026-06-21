@@ -6,15 +6,16 @@ import exceptions.PromedioInvalidoException;
 import java.time.LocalDate;
 import org.apache.commons.lang3.StringUtils;
 
-
 public class Alumno extends Persona {
-    
+
     private static final String EMPTY_STRING = "";
     private static final String SLASH = "/";
-    
+
     private double promedio;
     private LocalDate fecIng;
     private LocalDate fecNac;
+    private short cantMatAprob;
+    private char estado; // A o B
 
     public LocalDate getFecNac() {
         return fecNac;
@@ -23,16 +24,15 @@ public class Alumno extends Persona {
     public void setFecNac(LocalDate fecNac) {
         this.fecNac = fecNac;
     }
-    private short cantMatAprob;
-    private char estado; // A o B
 
     public Alumno() {
     }
+
     public Alumno(int dni) {
         super(dni);
         //System.out.println("Alumno con dni: "+this.dni);
     }
-    
+
     public Alumno(int dni, String nombre, String apellido) throws NombreApellidoInvalidoException {
         super(dni, nombre, apellido);
     }
@@ -44,45 +44,45 @@ public class Alumno extends Persona {
     }
 
     public Alumno(int dni, String nombre, String apellido, short edad,
-            double promedio, LocalDate fecIng, short cantMatAprob) 
+            double promedio, LocalDate fecIng, short cantMatAprob)
             throws EdadInvalidaException, PromedioInvalidoException, NombreApellidoInvalidoException {
         super(dni, nombre, apellido, edad);
         setPromedio(promedio);
         this.fecIng = fecIng;
         this.cantMatAprob = cantMatAprob;
     }
-    
+
     public double getPromedio() {
         return promedio;
     }
 
     public void setPromedio(double promedio) throws PromedioInvalidoException {
-        if (promedio<0 || promedio > 10) {
+        if (promedio < 0 || promedio > 10) {
             throw new PromedioInvalidoException("El promedio es invalido");
         }
         this.promedio = promedio;
     }
 
     public String getFecIngStr() {
-        if (fecIng==null) {
+        if (fecIng == null) {
             return EMPTY_STRING;
         }
         String dayOfMonth = StringUtils.leftPad(String.valueOf(fecIng.getDayOfMonth()), 2, "0");
-        return EMPTY_STRING+dayOfMonth+SLASH+fecIng.getMonthValue()+SLASH+fecIng.getYear();
+        return EMPTY_STRING + dayOfMonth + SLASH + fecIng.getMonthValue() + SLASH + fecIng.getYear();
     }
-    
+
     public String getFecNacStr() {
-    if (fecNac == null) {
-        return EMPTY_STRING;
+        if (fecNac == null) {
+            return EMPTY_STRING;
+        }
+        String dayOfMonth = StringUtils.leftPad(String.valueOf(fecNac.getDayOfMonth()), 2, "0");
+        return EMPTY_STRING + dayOfMonth + SLASH + fecNac.getMonthValue() + SLASH + fecNac.getYear();
     }
-    String dayOfMonth = StringUtils.leftPad(String.valueOf(fecNac.getDayOfMonth()), 2, "0");
-    return EMPTY_STRING + dayOfMonth + SLASH + fecNac.getMonthValue() + SLASH + fecNac.getYear();
-}
-    
+
     public LocalDate getFecIng() {
         return fecIng;
     }
-    
+
     public void setFecIng(LocalDate fecIng) {
         // TODO validar contra fecNac, 18 años
         // TODO Lanzar FecIngInvalidaException
@@ -105,11 +105,10 @@ public class Alumno extends Persona {
         this.estado = estado;
     }
 
-    
     @Override
     public String toString() {
-        return super.toString() +
-                " Alumno{" + "promedio=" + promedio + ", fecIng=" + getFecIngStr() + ", fecNac=" + getFecNacStr() +", cantMatAprob=" + cantMatAprob + '}';
+        return super.toString()
+                + " Alumno{" + "promedio=" + promedio + ", fecIng=" + getFecIngStr() + ", fecNac=" + getFecNacStr() + ", cantMatAprob=" + cantMatAprob + '}';
     }
 
 }

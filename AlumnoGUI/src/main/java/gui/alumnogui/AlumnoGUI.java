@@ -23,6 +23,7 @@ import java.util.logging.Logger;
 import javax.swing.JFileChooser;
 import javax.swing.JOptionPane;
 import persona.Alumno;
+import gui.alumnogui.AlumnoTableRenderer;
 
 public class AlumnoGUI extends javax.swing.JFrame {
 
@@ -32,6 +33,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
     private DAO<Alumno, Integer> dao;
     private AlumnoDAOTXT daoTXT;
     private AlumnoDAOSQL daoSQL;
+    private AlumnoTableRenderer renderer;
 
     /**
      * Creates new form AlumnoGUI
@@ -48,6 +50,9 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
         alumnosModel.setAlumnos(alumnos);
         alumnosTable.setModel(alumnosModel);
+
+        renderer = new AlumnoTableRenderer(alumnos);
+        alumnosTable.setDefaultRenderer(Object.class, renderer);
     }
 
     /**
@@ -248,20 +253,24 @@ public class AlumnoGUI extends javax.swing.JFrame {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(txtPanel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(12, 12, 12)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addGroup(layout.createSequentialGroup()
                                 .addGap(31, 31, 31)
                                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 88, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(40, 40, 40)
                                 .addComponent(repoComboBox, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                            .addComponent(verTodosCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addComponent(dbConnPanel, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(0, 23, Short.MAX_VALUE)))
+                        .addGap(0, 23, Short.MAX_VALUE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(12, 12, 12)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(verTodosCheckBox, javax.swing.GroupLayout.PREFERRED_SIZE, 233, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -338,13 +347,12 @@ public class AlumnoGUI extends javax.swing.JFrame {
             int resp = JOptionPane.showConfirmDialog(this, "Está seguro de eliminar al alumno " + alu.getNombre(), "Confirmación",
                     JOptionPane.OK_CANCEL_OPTION);
 
-            if (resp==JOptionPane.OK_OPTION) {
-                    alumnos.remove(index);
+            if (resp == JOptionPane.OK_OPTION) {
+                alumnos.remove(index);
                 //alumnos.remove(alumnos.get(alumnos.size()-1));
-                    alumnosModel.fireTableDataChanged(); // refresh de la grilla
-                }
+                alumnosModel.fireTableDataChanged(); // refresh de la grilla
             }
-        else {
+        } else {
             JOptionPane.showMessageDialog(this, "No ha seleccionado un alumno", "Error", JOptionPane.WARNING_MESSAGE);
         }
     }//GEN-LAST:event_eliminarButtonActionPerformed
@@ -373,6 +381,9 @@ public class AlumnoGUI extends javax.swing.JFrame {
         alumnos = alumnos1;
         alumnosModel.setAlumnos(alumnos1);
         alumnosModel.fireTableDataChanged();
+        if (renderer != null) {
+            renderer.setAlumnos(alumnos);
+        }
     }
 
     private void modificarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_modificarButtonActionPerformed
@@ -416,21 +427,110 @@ public class AlumnoGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_formWindowClosing
 
     private void consutarButtonActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_consutarButtonActionPerformed
+        int selectedRow = alumnosTable.getSelectedRow();
+        if (selectedRow == -1) {
+            JOptionPane.showMessageDialog(this,
+                    "Debe seleccionar un alumno para consultar.",
+                    "Aviso",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        Alumno alu = alumnos.get(selectedRow);
+        AlumnoDTO dto = AlumnoMapper.entity2Dto(alu);
+
         AlumnoDialog alumnoDialog = new AlumnoDialog(this, true, CrudOptionsEnum.READ);
+        alumnoDialog.setDto(dto);
         alumnoDialog.setVisible(true);
 
     }//GEN-LAST:event_consutarButtonActionPerformed
 
     private void userDBTextFieldActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_userDBTextFieldActionPerformed
-        // TODO add your handling code here:
+        try {
+            recargarAlumnos();
+        } catch (DAOException ex) {
+            Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this,
+                    "Error al recargar los alumnos: " + ex.getLocalizedMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_userDBTextFieldActionPerformed
 
     private void verTodosCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verTodosCheckBoxActionPerformed
-        // TODO add your handling code here:
+        // Solo recargar si ya hay una conexión activa (daoSQL no es null)
+        if (daoSQL != null) {
+            try {
+                // Obtener el estado del checkbox
+                boolean incluirTodos = verTodosCheckBox.isSelected();
+                // Recargar los alumnos desde la BD con el filtro correspondiente
+                List<Alumno> alumnosBD = dao.findAll(incluirTodos);
+                // Actualizar la tabla
+                setAlumnosInModel(alumnosBD);
+            } catch (DAOException ex) {
+                Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+                JOptionPane.showMessageDialog(this,
+                        "Error al recargar los alumnos: " + ex.getLocalizedMessage(),
+                        "Error", JOptionPane.ERROR_MESSAGE);
+            }
+        }
     }//GEN-LAST:event_verTodosCheckBoxActionPerformed
 
+    private void recargarAlumnos() throws DAOException {
+        if (dao != null) {
+            boolean incluirTodos = verTodosCheckBox.isSelected();
+            List<Alumno> alumnosBD = dao.findAll(incluirTodos);
+            setAlumnosInModel(alumnosBD);
+        }
+    }
+
     private void btnBDActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBDActionPerformed
-        // TODO add your handling code here:
+        String user = userDBTextField.getText().trim();
+        if (user.isEmpty()) {
+            JOptionPane.showMessageDialog(this,
+                    "Debe ingresar un usuario",
+                    "Error",
+                    JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 2. Pedir contraseña
+        String password = JOptionPane.showInputDialog(this,
+                "Ingrese la contraseña para la base de datos:");
+        if (password == null) { // Usuario canceló
+            return;
+        }
+
+        // 3. Conectar y cargar datos
+        try {
+            // Configurar el mapa para la fábrica
+            Map<String, String> config = new HashMap<>();
+            config.put(DAOFactory.TIPO_DAO, DAOFactory.TIPO_DAO_SQL);
+            config.put(DAOFactory.USER_DB, user);
+            config.put(DAOFactory.PWD_DB, password);
+
+            // Crear el DAO mediante la fábrica
+            dao = DAOFactory.createDAO(config);
+            if (dao instanceof AlumnoDAOSQL alumnoDAOSQL) {
+                daoSQL = alumnoDAOSQL;
+            }
+
+            // 4. Recargar los alumnos según el checkbox
+            recargarAlumnos();
+
+            // 5. Mensaje de éxito
+            JOptionPane.showMessageDialog(this,
+                    "Conexión exitosa. Se cargaron " + alumnos.size() + " alumnos.",
+                    "Éxito",
+                    JOptionPane.INFORMATION_MESSAGE);
+
+        } catch (DAOFactoryException | DAOException ex) {
+            Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+            JOptionPane.showMessageDialog(this,
+                    "Error al conectar o consultar: " + ex.getLocalizedMessage(),
+                    "Error",
+                    JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_btnBDActionPerformed
 
     /**

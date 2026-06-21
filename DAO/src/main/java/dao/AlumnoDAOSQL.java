@@ -17,6 +17,7 @@ import java.util.logging.Logger;
 import persona.Alumno;
 import utils.DateUtils;
 import java.time.LocalDate;
+import java.util.ArrayList;
 
 public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
 
@@ -101,7 +102,37 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
 
     @Override
     public List<Alumno> findAll(boolean all) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+        List<Alumno> lista = new ArrayList<>();
+        String sql = "SELECT DNI, NOMBRE, APELLIDO, FECNAC, FECING, PROMEDIO, ESTADO FROM alumnos";
+        if (!all) {
+            sql += " WHERE estado = 1";
+        }
+        try (PreparedStatement stmt = connection.prepareStatement(sql); ResultSet rs = stmt.executeQuery()) {
+
+            while (rs.next()) {
+                Alumno alu = new Alumno();
+                alu.setDni(rs.getInt("DNI"));
+                alu.setNombre(rs.getString("NOMBRE"));
+                alu.setApellido(rs.getString("APELLIDO"));
+                alu.setFecNac(DateUtils.sqlDate2LocalDate(rs.getDate("FECNAC")));
+                alu.setFecIng(DateUtils.sqlDate2LocalDate(rs.getDate("FECING")));
+                alu.setPromedio(rs.getDouble("PROMEDIO"));
+                int estadoInt = rs.getInt("ESTADO");
+                char estadoChar = (estadoInt == 1) ? 'A' : 'I';
+                alu.setEstado(estadoChar);
+
+                lista.add(alu);
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AlumnoDAOSQL.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al listar alumnos: " + ex.getLocalizedMessage());
+        } catch (NombreApellidoInvalidoException /*| PromedioInvalidoException*/ ex) {
+            Logger.getLogger(AlumnoDAOSQL.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al mapear datos: " + ex.getLocalizedMessage());
+        } catch (PromedioInvalidoException ex) {
+            Logger.getLogger(AlumnoDAOSQL.class.getName()).log(Level.SEVERE, null, ex);
+        }
+        return lista;
     }
 
     @Override
