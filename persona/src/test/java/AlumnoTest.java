@@ -118,4 +118,22 @@ public class AlumnoTest {
             );
         });
     }
+
+    @Test
+    public void alumnoMenorDe17AniosAlIngresarLanzaException() {
+        assertThrows(FechaInvalidaException.class, () -> {
+
+            new Alumno(
+                    12345678,
+                    "Ana",
+                    "Gomez",
+                    LocalDate.of(2010, 1, 1),
+                    8,
+                    LocalDate.of(2025, 1, 1),
+                    (short) 10,
+                    'A'
+            );
+
+        });
+    }
 }

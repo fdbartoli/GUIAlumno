@@ -71,6 +71,13 @@ public class Alumno extends Persona {
                     "La fecha de ingreso no puede ser anterior a la fecha de nacimiento");
         }
 
+        if (getFecNac() != null &&
+            fecIng.isBefore(getFecNac().plusYears(17))) {
+
+            throw new FechaInvalidaException(
+                    "El alumno debe tener al menos 17 años al ingresar");
+        }
+
         this.fecIng = fecIng;
     }
 
