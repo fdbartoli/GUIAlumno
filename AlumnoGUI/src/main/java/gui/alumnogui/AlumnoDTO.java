@@ -6,10 +6,6 @@ package gui.alumnogui;
 
 import java.time.LocalDate;
 
-/**
- *
- * @author g.guzman
- */
 public class AlumnoDTO {
     private String dni;
     private String nombre;

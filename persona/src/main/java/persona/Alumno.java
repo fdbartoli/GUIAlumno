@@ -15,6 +15,7 @@ public class Alumno extends Persona {
     private double promedio;
     private LocalDate fecIng;
     private LocalDate fecNac;
+    
 
     public LocalDate getFecNac() {
         return fecNac;

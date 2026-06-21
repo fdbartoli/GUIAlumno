@@ -12,7 +12,7 @@ import persona.Alumno;
 public class AlumnosModel extends AbstractTableModel {
     
     private List<Alumno> alumnos;
-    private static final String[] ENCABEZADOS = {"DNI", "NOMBRE", "APELLIDO", "FECHA NAC."};
+    private static final String[] ENCABEZADOS = {"DNI", "NOMBRE", "APELLIDO", "ESTADO"};
 
     public void setAlumnos(List<Alumno> alumnos) {
         this.alumnos = alumnos;
@@ -43,7 +43,7 @@ public class AlumnosModel extends AbstractTableModel {
                 return alu.getApellido();
             }
             case 3 -> {
-                 return alu.getFecNac();
+                 return alu.getEstado();
             }
             default -> throw new AssertionError();
         }
