@@ -4,7 +4,12 @@
  */
 package gui.alumnogui;
 
+import exceptions.CantidadMateriasInvalidaException;
+import exceptions.DniInvalidoException;
+import exceptions.EstadoInvalidoException;
+import exceptions.FechaInvalidaException;
 import exceptions.NombreApellidoInvalidoException;
+import exceptions.PromedioInvalidoException;
 import org.apache.commons.lang3.StringUtils;
 import persona.Alumno;
 
@@ -22,16 +27,29 @@ public final class AlumnoMapper {
         dto.setFecIng(alu.getFecIng());
         dto.setEstado(alu.getEstado());
         dto.setPromedio(alu.getPromedio());
-
+        dto.setCantMatAprob(alu.getCantMatAprob());
         return dto;
     }
 
-    public static Alumno dto2Entity(AlumnoDTO dto) throws NombreApellidoInvalidoException {
+    public static Alumno dto2Entity(AlumnoDTO dto)
+            throws DniInvalidoException,
+                   NombreApellidoInvalidoException,
+                   FechaInvalidaException,
+                   PromedioInvalidoException,
+                   CantidadMateriasInvalidaException,
+                   EstadoInvalidoException {
+
         Alumno alu = new Alumno();
+
         alu.setDni(Integer.valueOf(dto.getDni()));
         alu.setNombre(dto.getNombre());
+        alu.setApellido(dto.getApellido());
+        alu.setFecNac(dto.getFecNac());
+        alu.setFecIng(dto.getFecIng());
+        alu.setEstado(dto.getEstado());
+        alu.setPromedio(dto.getPromedio());
+        alu.setCantMatAprob(dto.getCantMatAprob());
 
         return alu;
     }
-
 }

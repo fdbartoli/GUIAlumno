@@ -14,6 +14,7 @@ public class AlumnoDTO {
     private LocalDate fecNac;
     private LocalDate fecIng;
     private double promedio;
+    private short cantMatAprob;
     private char estado;
 
     public double getPromedio() {
@@ -22,6 +23,14 @@ public class AlumnoDTO {
 
     public void setPromedio(double promedio) {
         this.promedio = promedio;
+    }
+
+    public short getCantMatAprob() {
+        return cantMatAprob;
+    }
+
+    public void setCantMatAprob(short cantMatAprob) {
+        this.cantMatAprob = cantMatAprob;
     }
 
     public LocalDate getFecNac() {
@@ -71,5 +80,4 @@ public class AlumnoDTO {
     public void setFecIng(LocalDate fecIng) {
         this.fecIng = fecIng;
     }
-
 }

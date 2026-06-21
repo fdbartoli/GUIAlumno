@@ -12,7 +12,12 @@ import dao.DAOFactory;
 import static dao.DAOFactory.FULLPATH;
 import static dao.DAOFactory.TIPO_DAO;
 import dao.DAOFactoryException;
+import exceptions.CantidadMateriasInvalidaException;
+import exceptions.DniInvalidoException;
+import exceptions.EstadoInvalidoException;
+import exceptions.FechaInvalidaException;
 import exceptions.NombreApellidoInvalidoException;
+import exceptions.PromedioInvalidoException;
 import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -334,7 +339,13 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
             //alumnos.add(new Alumno(3, "María Ines", "Gomez"));
             //alumnosModel.fireTableDataChanged(); // refresh de la grilla
-        } catch (NombreApellidoInvalidoException | DAOException ex) {
+        } catch (NombreApellidoInvalidoException | 
+                DniInvalidoException |
+                FechaInvalidaException |
+                PromedioInvalidoException |
+                CantidadMateriasInvalidaException |
+                EstadoInvalidoException |
+                DAOException ex) {
             Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
 
         }
@@ -403,7 +414,13 @@ public class AlumnoGUI extends javax.swing.JFrame {
                 try {
                     dao.update(AlumnoMapper.dto2Entity(dto));
 
-                } catch (DAOException | NombreApellidoInvalidoException ex) {
+                } catch (NombreApellidoInvalidoException |
+                        DniInvalidoException |
+                        FechaInvalidaException |
+                        PromedioInvalidoException |
+                        CantidadMateriasInvalidaException |
+                        EstadoInvalidoException |
+                        DAOException ex) {
                     Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
                 }
             }
