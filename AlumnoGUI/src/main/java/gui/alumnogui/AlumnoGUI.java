@@ -409,19 +409,9 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
         if (resp == JOptionPane.OK_OPTION) {
             try {
-                // Si el DAO es SQL (Base de Datos)
-                if (dao instanceof AlumnoDAOSQL) {
-                    dao.delete(alu.getDni());
-                    recargarAlumnos(); // refresca la tabla desde la BD
-                    JOptionPane.showMessageDialog(this, "Alumno eliminado de la base de datos", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                } // Si el DAO es TXT (archivo)
-                else if (dao instanceof AlumnoDAOTXT) {
-                    alumnos.remove(index);
-                    alumnosModel.fireTableDataChanged();
-                    JOptionPane.showMessageDialog(this, "Alumno eliminado de la lista local", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-                } else {
-                    JOptionPane.showMessageDialog(this, "Repositorio no soportado para eliminar", "Error", JOptionPane.ERROR_MESSAGE);
-                }
+                dao.delete(alu.getDni());
+                recargarAlumnos();
+                JOptionPane.showMessageDialog(this, "Alumno dado de baja correctamente", "Éxito", JOptionPane.INFORMATION_MESSAGE);
             } catch (DAOException ex) {
                 Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this,

@@ -24,3 +24,7 @@ Desktop.ini
 
 # Logs
 *.log
+
+# Documentación local
+documentacion.html
+generar_doc.py
