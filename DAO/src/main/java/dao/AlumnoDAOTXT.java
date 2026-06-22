@@ -50,7 +50,7 @@ public class AlumnoDAOTXT extends DAO<Alumno, Integer> {
     }
 
     @Override
-    public Alumno read(Integer dni) 
+    public Alumno read(Integer dni)
             throws DAOException {
         try {
             raf.seek(0); // Se posiciona al comienzo
@@ -82,8 +82,36 @@ public class AlumnoDAOTXT extends DAO<Alumno, Integer> {
 
     @Override
     public void update(Alumno alu) throws DAOException {
-        // raf.getFilePointer() para poder posicionarse al inicio del alumno a 
-        // actualizar
+        try {
+            raf.seek(0);
+            List<String> lineas = new ArrayList<>();
+            String linea;
+            boolean encontrado = false;
+
+            while ((linea = raf.readLine()) != null) {
+                if (linea.trim().isEmpty()) continue;
+                String dniTxt = linea.split("\t")[0];
+                if (Integer.parseInt(dniTxt) == alu.getDni()) {
+                    lineas.add(AlumnoUtils.alumno2String(alu));
+                    encontrado = true;
+                } else {
+                    lineas.add(linea);
+                }
+            }
+
+            if (!encontrado) {
+                throw new DAOException("El alumno con DNI " + alu.getDni() + " no existe en el archivo.");
+            }
+
+            raf.seek(0);
+            raf.setLength(0);
+            for (String l : lineas) {
+                raf.writeBytes(l + System.lineSeparator());
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(AlumnoDAOTXT.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error I/O: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override
