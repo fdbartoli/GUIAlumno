@@ -368,6 +368,8 @@ public class AlumnoGUI extends javax.swing.JFrame {
                 "Alumno creado correctamente",
                 "Éxito",
                 JOptionPane.INFORMATION_MESSAGE);
+        
+              recargarAlumnos(); // refresca la tabla desde la BD
             }
 
             //alumnos.add(new Alumno(3, "María Ines", "Gomez"));
