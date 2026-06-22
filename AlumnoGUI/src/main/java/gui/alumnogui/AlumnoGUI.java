@@ -59,6 +59,8 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
         renderer = new AlumnoTableRenderer(alumnos);
         alumnosTable.setDefaultRenderer(Object.class, renderer);
+
+        setCrudButtonsEnabled(false);
     }
 
     /**
@@ -326,6 +328,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
 
     private void repoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repoComboBoxActionPerformed
         setAlumnosInModel(new ArrayList<>());
+        setCrudButtonsEnabled(false);
         if (repoComboBox.getSelectedIndex() == 0) { // TXT
             if (daoTXT != null) {
                 try {
@@ -436,6 +439,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
                 dao = daoTXT;
 
                 setAlumnosInModel(dao.findAll(false)); // TODO: utilizar el checkbox
+                setCrudButtonsEnabled(true);
             } catch (DAOFactoryException | DAOException ex) {
                 Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
                 JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
@@ -549,6 +553,13 @@ public class AlumnoGUI extends javax.swing.JFrame {
         }
     }//GEN-LAST:event_verTodosCheckBoxActionPerformed
 
+    private void setCrudButtonsEnabled(boolean enabled) {
+        crearButton.setEnabled(enabled);
+        modificarButton.setEnabled(enabled);
+        eliminarButton.setEnabled(enabled);
+        consutarButton.setEnabled(enabled);
+    }
+
     private void recargarAlumnos() throws DAOException {
         if (dao != null) {
             boolean incluirTodos = verTodosCheckBox.isSelected();
@@ -589,6 +600,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             }
 
             recargarAlumnos();
+            setCrudButtonsEnabled(true);
 
             // Marcar como conectado
             connected = true;
@@ -626,6 +638,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             // Limpiar la lista de alumnos
             alumnos.clear();
             alumnosModel.fireTableDataChanged();
+            setCrudButtonsEnabled(false);
             verTodosCheckBox.setSelected(false);
             // Marcar como desconectado
             connected = false;
