@@ -30,9 +30,10 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
             connection = DriverManager.getConnection("jdbc:mysql://localhost:3306/universidad", user, password);
             System.out.println("dao.AlumnoDAOSQL.<init>() OK!!!");
 
-            String insertSql = "INSERT INTO alumnos\n"
-                    + "(DNI, NOMBRE, APELLIDO, FECNAC, FECING, PROMEDIO)\n"
-                    + "VALUES (?, ?, ?, ?, ?, ?);";
+            String insertSql =
+            "INSERT INTO alumnos " +
+            "(DNI, NOMBRE, APELLIDO, FECNAC, FECING, PROMEDIO, ESTADO) " +
+            "VALUES (?, ?, ?, ?, ?, ?, ?)";
             insertPrepareStatement = connection.prepareStatement(insertSql);
 
             String readSql = "SELECT * FROM alumnos WHERE DNI = ?";
@@ -51,9 +52,10 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
             insertPrepareStatement.setInt(index++, alumno.getDni());
             insertPrepareStatement.setString(index++, alumno.getNombre());
             insertPrepareStatement.setString(index++, alumno.getApellido());
-            insertPrepareStatement.setDate(index++, DateUtils.localDate2SqlDate(LocalDate.of(2002, 5, 15)));
+            insertPrepareStatement.setDate(index++, DateUtils.localDate2SqlDate(alumno.getFecNac()));
             insertPrepareStatement.setDate(index++, DateUtils.localDate2SqlDate(alumno.getFecIng()));
             insertPrepareStatement.setDouble(index++, alumno.getPromedio());
+            insertPrepareStatement.setString(index++, String.valueOf(alumno.getEstado()));
 
             insertPrepareStatement.execute();
         } catch (SQLException ex) {

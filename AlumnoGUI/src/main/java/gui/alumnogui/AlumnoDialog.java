@@ -4,6 +4,7 @@
  */
 package gui.alumnogui;
 
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.time.ZoneId;
@@ -11,9 +12,7 @@ import java.util.Calendar;
 import java.util.GregorianCalendar;
 import javax.swing.JOptionPane;
 import org.apache.commons.lang3.StringUtils;
-import dao.AlumnoDAOSQL;
-import dao.AlumnoDAOTXT;
-import dao.DAO;
+
 import dao.DAOException;
 import persona.Alumno;
 
@@ -29,10 +28,6 @@ public class AlumnoDialog extends javax.swing.JDialog {
         this.dto = dto;
     }
     
-     private DAO<Alumno, Integer> dao;
-    private AlumnoDAOTXT daoTXT;
-    private AlumnoDAOSQL daoSQL;
-
     /**
      * Creates new form AlumnoDialog
      */
@@ -116,11 +111,11 @@ public class AlumnoDialog extends javax.swing.JDialog {
 
         nombre.setText("Nombre:");
 
-        fecIng.setText("Fecha Ing:");
+        fecIng.setText("Fecha Nacimiento:");
 
         apellido.setText("Apellido:");
 
-        fecNac.setText("Fecha Nacimiento:");
+        fecNac.setText("Fecha Ingreso:");
 
         estado.setText("Estado:");
 
@@ -243,52 +238,88 @@ public class AlumnoDialog extends javax.swing.JDialog {
         dto = new AlumnoDTO();
         dto.setDni(dniTextField.getText().trim());
         dto.setNombre(nombreTextField.getText().trim());
-
+        dto.setApellido(nombreTextField1.getText().trim());
+        dto.setEstado(nombreTextField3.getText().trim().charAt(0));
+        
+        
+        
         Calendar calendar = fecIngDateChooser.getCalendar();
+        Calendar dateNacimiento = fecIngDateChooser1.getCalendar();
+        
+        if (calendar == null) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Debe ingresar fecha de Ingreso",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+        
+        if (dateNacimiento == null) {
+        JOptionPane.showMessageDialog(
+                this,
+                "Debe ingresar fecha de Nacimiento",
+                "Error",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }
+        
+        
         LocalDate fecIng = LocalDateTime
                 .ofInstant(calendar.toInstant(),
                         calendar.getTimeZone().toZoneId())
                 .toLocalDate();
+        
+         LocalDate fecNac = LocalDateTime
+        .ofInstant(dateNacimiento.toInstant(),
+                dateNacimiento.getTimeZone().toZoneId())
+        .toLocalDate();
 
-        dto.setFecIng(fecIng);
-
-       
-        if (dto == null) {
-            JOptionPane.showMessageDialog(this,
-                    "Primero debe conectar a la base de datos",
-                    "Error",
-                    JOptionPane.WARNING_MESSAGE);
+        if (fecNac.isAfter(LocalDate.now())) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "La fecha de nacimiento no puede ser futura",
+                    "Fecha inválida",
+                    JOptionPane.ERROR_MESSAGE);
             return;
         }
+         
+        if (fecIng.isAfter(LocalDate.now())) {
+            JOptionPane.showMessageDialog(
+                    this,
+                    "La fecha de ingreso no puede ser futura",
+                    "Fecha inválida",
+                    JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        
+        /*if (fecIng.isBefore(fecNac)) {
+        JOptionPane.showMessageDialog(
+                this,
+                "La fecha de ingreso no puede ser anterior a la fecha de nacimiento",
+                "Fecha inválida",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+    }*/
 
-        // 3. DTO → Alumno (necesario porque tu DAO usa Alumno)
-        Alumno alumno = new Alumno();
-
-        alumno.setDni(Integer.parseInt(dto.getDni()));
-        alumno.setNombre(dto.getNombre());
-        alumno.setFecIng(dto.getFecIng());
-
-        // (IMPORTANTE: si tu tabla lo requiere, completa estos campos)
-        alumno.setApellido(dto.getApellido()); // o desde un campo del form
-        alumno.setPromedio(0.0);
-        alumno.setEstado(dto.getEstado());
-
-        // 4. INSERT en BD
-        dao.create(alumno);
-
-        // 5. Confirmación
-        JOptionPane.showMessageDialog(this,
-                "Alumno creado correctamente",
-                "Éxito",
-                JOptionPane.INFORMATION_MESSAGE);
+        dto.setFecIng(fecIng);
+        dto.setFecNac(fecNac);
+        
+    /*    try {
+        dto.setFecNac(fecNac);
+        dto.setFecIng(fecIng);
+    } catch (FechaInvalidaException ex) {
+        JOptionPane.showMessageDialog(
+                this,
+                ex.getMessage(),
+                "Fecha inválida",
+                JOptionPane.ERROR_MESSAGE);
+        return;
+}*/
 
         setVisible(false);
 
-    } catch (DAOException ex) {
-        JOptionPane.showMessageDialog(this,
-                "Error al insertar: " + ex.getMessage(),
-                "Error",
-                JOptionPane.ERROR_MESSAGE);
+    
     } catch (Exception ex) {
         JOptionPane.showMessageDialog(this,
                 "Error general: " + ex.getMessage(),

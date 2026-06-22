@@ -334,7 +334,14 @@ public class AlumnoGUI extends javax.swing.JFrame {
             AlumnoDTO dto = alumnoDialog.getDto();
 
             if (dto != null) {
+                dao = daoSQL;
                 dao.create(AlumnoMapper.dto2Entity(dto));
+                
+                 // Confirmación
+        JOptionPane.showMessageDialog(this,
+                "Alumno creado correctamente",
+                "Éxito",
+                JOptionPane.INFORMATION_MESSAGE);
             }
 
             //alumnos.add(new Alumno(3, "María Ines", "Gomez"));

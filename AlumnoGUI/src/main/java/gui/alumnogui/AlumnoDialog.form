@@ -179,7 +179,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="fecIng">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Fecha Ing:"/>
+            <Property name="text" type="java.lang.String" value="Fecha Nacimiento:"/>
           </Properties>
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="fecIngDateChooser">
@@ -193,7 +193,7 @@
         </Component>
         <Component class="javax.swing.JLabel" name="fecNac">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Fecha Nacimiento:"/>
+            <Property name="text" type="java.lang.String" value="Fecha Ingreso:"/>
           </Properties>
         </Component>
         <Component class="com.toedter.calendar.JDateChooser" name="fecIngDateChooser1">
