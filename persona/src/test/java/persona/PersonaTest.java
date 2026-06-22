@@ -63,4 +63,25 @@ public class PersonaTest {
             new Persona(12345678, "Juan", "Perez", LocalDate.now().plusDays(1));
         });
     }
+    
+    @Test
+    public void nombreNuloLanzaException() {
+        assertThrows(NombreApellidoInvalidoException.class, () -> {
+            new Persona(12345678, null, "Perez", LocalDate.of(1990, 1, 1));
+        });
+    }
+
+    @Test
+    public void apellidoNuloLanzaException() {
+        assertThrows(NombreApellidoInvalidoException.class, () -> {
+            new Persona(12345678, "Juan", null, LocalDate.of(1990, 1, 1));
+        });
+    }
+
+    @Test
+    public void fechaNacimientoNulaLanzaException() {
+        assertThrows(FechaInvalidaException.class, () -> {
+            new Persona(12345678, "Juan", "Perez", null);
+        });
+    }
 }

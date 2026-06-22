@@ -136,4 +136,148 @@ public class AlumnoTest {
 
         });
     }
+    
+    @Test
+    public void fechaIngresoNulaLanzaException() {
+        assertThrows(FechaInvalidaException.class, () -> {
+            new Alumno(
+                    12345678,
+                    "Ana",
+                    "Gomez",
+                    LocalDate.of(2000, 5, 10),
+                    8,
+                    null,
+                    (short) 12,
+                    'A'
+            );
+        });
+    }
+
+    @Test
+    public void fechaIngresoMenorA17AniosLanzaException() {
+        assertThrows(FechaInvalidaException.class, () -> {
+            new Alumno(
+                    12345678,
+                    "Ana",
+                    "Gomez",
+                    LocalDate.of(2010, 1, 1),
+                    8,
+                    LocalDate.of(2025, 1, 1),
+                    (short) 12,
+                    'A'
+            );
+        });
+    }
+
+    @Test
+    public void promedioCeroEsValido() throws Exception {
+        Alumno alumno = new Alumno(
+                12345678,
+                "Ana",
+                "Gomez",
+                LocalDate.of(2000, 5, 10),
+                0,
+                LocalDate.of(2020, 3, 1),
+                (short) 12,
+                'A'
+        );
+
+        assertEquals(0, alumno.getPromedio());
+    }
+
+    @Test
+    public void promedioDiezEsValido() throws Exception {
+        Alumno alumno = new Alumno(
+                12345678,
+                "Ana",
+                "Gomez",
+                LocalDate.of(2000, 5, 10),
+                10,
+                LocalDate.of(2020, 3, 1),
+                (short) 12,
+                'A'
+        );
+
+        assertEquals(10, alumno.getPromedio());
+    }
+
+    @Test
+    public void cantidadMateriasCeroEsValida() throws Exception {
+        Alumno alumno = new Alumno(
+                12345678,
+                "Ana",
+                "Gomez",
+                LocalDate.of(2000, 5, 10),
+                8,
+                LocalDate.of(2020, 3, 1),
+                (short) 0,
+                'A'
+        );
+
+        assertEquals(0, alumno.getCantMatAprob());
+    }
+
+    @Test
+    public void estadoNuloLanzaException() {
+        assertThrows(EstadoInvalidoException.class, () -> {
+            new Alumno(
+                    12345678,
+                    "Ana",
+                    "Gomez",
+                    LocalDate.of(2000, 5, 10),
+                    8,
+                    LocalDate.of(2020, 3, 1),
+                    (short) 12,
+                    null
+            );
+        });
+    }
+
+    @Test
+    public void estadoVacioLanzaException() {
+        assertThrows(EstadoInvalidoException.class, () -> {
+            new Alumno(
+                    12345678,
+                    "Ana",
+                    "Gomez",
+                    LocalDate.of(2000, 5, 10),
+                    8,
+                    LocalDate.of(2020, 3, 1),
+                    (short) 12,
+                    ""
+            );
+        });
+    }
+
+    @Test
+    public void estadoTextoLargoLanzaException() {
+        assertThrows(EstadoInvalidoException.class, () -> {
+            new Alumno(
+                    12345678,
+                    "Ana",
+                    "Gomez",
+                    LocalDate.of(2000, 5, 10),
+                    8,
+                    LocalDate.of(2020, 3, 1),
+                    (short) 12,
+                    "Activo"
+            );
+        });
+    }
+
+    @Test
+    public void estadoBEsValido() throws Exception {
+        Alumno alumno = new Alumno(
+                12345678,
+                "Ana",
+                "Gomez",
+                LocalDate.of(2000, 5, 10),
+                8,
+                LocalDate.of(2020, 3, 1),
+                (short) 12,
+                "B"
+        );
+
+        assertEquals('B', alumno.getEstado());
+    }
 }

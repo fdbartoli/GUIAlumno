@@ -42,6 +42,31 @@ public class Alumno extends Persona {
         setPromedio(promedio);
         setFecIng(fecIng);
         setCantMatAprob(cantMatAprob);
+        //llama a setEstado(char)
+        setEstado(estado);
+    }
+    
+    public Alumno(
+            int dni,
+            String nombre,
+            String apellido,
+            LocalDate fecNac,
+            double promedio,
+            LocalDate fecIng,
+            short cantMatAprob,
+            String estado)
+            throws DniInvalidoException,
+                   NombreApellidoInvalidoException,
+                   FechaInvalidaException,
+                   PromedioInvalidoException,
+                   CantidadMateriasInvalidaException,
+                   EstadoInvalidoException {
+
+        super(dni, nombre, apellido, fecNac);
+        setPromedio(promedio);
+        setFecIng(fecIng);
+        setCantMatAprob(cantMatAprob);
+        //llama a setEstado(String)
         setEstado(estado);
     }
 
@@ -116,7 +141,26 @@ public class Alumno extends Persona {
         return estado;
     }
 
+    public void setEstado(String estado)
+        throws EstadoInvalidoException {
+
+        if (StringUtils.isBlank(estado)) {
+            throw new EstadoInvalidoException(
+                    "El estado no puede ser nulo o vacío");
+        }
+
+        if (estado.length() != 1) {
+            throw new EstadoInvalidoException(
+                    "El estado debe contener un único carácter");
+        }
+
+        setEstado(estado.charAt(0));
+    }
+ 
     public void setEstado(char estado) throws EstadoInvalidoException {
+        if (estado == '\0') {
+            throw new EstadoInvalidoException("El estado no fue informado");
+        }        
         if (estado != 'A' && estado != 'B') {
             throw new EstadoInvalidoException("El estado debe ser A (Activo) o B (Baja)");
         }
