@@ -56,7 +56,8 @@ public class AlumnoDAOTXT extends DAO<Alumno, Integer> {
             raf.seek(0); // Se posiciona al comienzo
             String linea;
             while ((linea = raf.readLine()) != null) {
-                String dniTxt = linea.substring(0, 8);
+                if (linea.trim().isEmpty()) continue;
+                String dniTxt = linea.split("\t")[0];
                 if (Integer.valueOf(dniTxt).equals(dni)) {
                     return AlumnoUtils.string2Alumno(linea);
                 }
@@ -156,6 +157,9 @@ public class AlumnoDAOTXT extends DAO<Alumno, Integer> {
                  PromedioInvalidoException ex) {
             Logger.getLogger(AlumnoDAOTXT.class.getName()).log(Level.SEVERE, null, ex);
             throw new DAOException("Error al parsear línea: " + ex.getLocalizedMessage());
+        } catch (RuntimeException ex) {
+            Logger.getLogger(AlumnoDAOTXT.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error de formato en el archivo: " + ex.getLocalizedMessage());
         }
         return alumnos;
     }
@@ -176,7 +180,8 @@ public class AlumnoDAOTXT extends DAO<Alumno, Integer> {
             raf.seek(0); // Se posiciona al comienzo
             String linea;
             while ((linea = raf.readLine()) != null) {
-                String dniTxt = linea.substring(0, 8);
+                if (linea.trim().isEmpty()) continue;
+                String dniTxt = linea.split("\t")[0];
                 if (Integer.valueOf(dniTxt).equals(dni)) {
                     return true;
                 }
