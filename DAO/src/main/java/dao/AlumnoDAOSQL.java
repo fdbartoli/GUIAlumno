@@ -74,11 +74,7 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
             final ResultSet rs = readPrepareStatement.executeQuery();
             if (rs.next()) {
                 Alumno alu = new Alumno();
-                try {
-                    alu.setDni(rs.getInt("DNI"));
-                } catch (DniInvalidoException ex) {
-                    Logger.getLogger(AlumnoDAOSQL.class.getName()).log(Level.SEVERE, null, ex);
-                }
+                alu.setDni(rs.getInt("DNI"));
                 alu.setNombre(rs.getString("NOMBRE"));
                 alu.setApellido(rs.getString("APELLIDO"));
                 alu.setFecIng(DateUtils.sqlDate2LocalDate(rs.getDate("FECING")));
@@ -86,9 +82,8 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
                 alu.setPromedio(rs.getDouble("PROMEDIO"));
                 alu.setCantMatAprob(rs.getShort("CANTMATAPROB"));
 
-                int estadoInt = rs.getInt("ESTADO");
-                char estadoChar = (estadoInt == 1) ? 'A' : 'B';
-                alu.setEstado(estadoChar);
+                String estadoStr = rs.getString("ESTADO");
+                alu.setEstado(estadoStr.charAt(0));
                 return alu;
             }
         } catch (SQLException ex) {
@@ -152,10 +147,8 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
                 alu.setPromedio(rs.getDouble("PROMEDIO"));
                 alu.setCantMatAprob(rs.getShort("CANTMATAPROB"));
                 
-                int estadoInt = rs.getInt("ESTADO");
-                char estadoChar = (estadoInt == 1) ? 'A' : 'B';
-                alu.setEstado(estadoChar);
-
+                String estadoStr = rs.getString("ESTADO");
+                alu.setEstado(estadoStr.charAt(0));
                 lista.add(alu);
             }
         } catch (SQLException ex) {

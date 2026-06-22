@@ -58,11 +58,7 @@ public class AlumnoDAOTXT extends DAO<Alumno, Integer> {
             while ((linea = raf.readLine()) != null) {
                 String dniTxt = linea.substring(0, 8);
                 if (Integer.valueOf(dniTxt).equals(dni)) {
-                    try {
-                        return AlumnoUtils.string2Alumno(linea);
-                    } catch (DniInvalidoException ex) {
-                        Logger.getLogger(AlumnoDAOTXT.class.getName()).log(Level.SEVERE, null, ex);
-                    }
+                    return AlumnoUtils.string2Alumno(linea);
                 }
             }
         } catch (IOException ex) {
