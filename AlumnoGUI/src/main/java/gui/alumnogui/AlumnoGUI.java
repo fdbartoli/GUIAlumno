@@ -325,6 +325,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void repoComboBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_repoComboBoxActionPerformed
+        setAlumnosInModel(new ArrayList<>());
         if (repoComboBox.getSelectedIndex() == 0) { // TXT
             if (daoTXT != null) {
                 try {
