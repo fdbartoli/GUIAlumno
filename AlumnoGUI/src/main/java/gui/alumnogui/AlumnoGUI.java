@@ -370,7 +370,6 @@ public class AlumnoGUI extends javax.swing.JFrame {
             AlumnoDTO dto = alumnoDialog.getDto();
 
             if (dto != null) {
-                dao = daoSQL;
                 dao.create(AlumnoMapper.dto2Entity(dto));
                 
                  // Confirmación
@@ -541,8 +540,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
     }//GEN-LAST:event_userDBTextFieldActionPerformed
 
     private void verTodosCheckBoxActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_verTodosCheckBoxActionPerformed
-        // Solo recargar si ya hay una conexión activa (daoSQL no es null)
-        if (daoSQL != null) {
+        if (dao != null) {
             try {
                 // Obtener el estado del checkbox
                 boolean incluirTodos = verTodosCheckBox.isSelected();
@@ -564,6 +562,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
         modificarButton.setEnabled(enabled);
         eliminarButton.setEnabled(enabled);
         consutarButton.setEnabled(enabled);
+        verTodosCheckBox.setEnabled(enabled);
     }
 
     private void recargarAlumnos() throws DAOException {
