@@ -111,8 +111,27 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
     }
 
     @Override
-    public void update(Alumno entidad) throws DAOException {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void update(Alumno alumno) throws DAOException {
+        String sql = "UPDATE alumnos SET NOMBRE = ?, APELLIDO = ?, FECNAC = ?, FECING = ?, PROMEDIO = ?, CANTMATAPROB = ?, ESTADO = ? WHERE DNI = ?";
+        try (PreparedStatement stmt = connection.prepareStatement(sql)) {
+            int index = 1;
+            stmt.setString(index++, alumno.getNombre());
+            stmt.setString(index++, alumno.getApellido());
+            stmt.setDate(index++, DateUtils.localDate2SqlDate(alumno.getFecNac()));
+            stmt.setDate(index++, DateUtils.localDate2SqlDate(alumno.getFecIng()));
+            stmt.setDouble(index++, alumno.getPromedio());
+            stmt.setShort(index++, alumno.getCantMatAprob());
+            stmt.setString(index++, String.valueOf(alumno.getEstado()));
+            stmt.setInt(index++, alumno.getDni());
+
+            int filas = stmt.executeUpdate();
+            if (filas == 0) {
+                throw new DAOException("No se encontró el alumno con DNI " + alumno.getDni());
+            }
+        } catch (SQLException ex) {
+            Logger.getLogger(AlumnoDAOSQL.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al actualizar: " + ex.getLocalizedMessage());
+        }
     }
 
     @Override

@@ -107,9 +107,29 @@ public class AlumnoDAOTXT extends DAO<Alumno, Integer> {
     @Override
     public List<Alumno> findAll(boolean all) throws DAOException {
         List<Alumno> alumnos = new ArrayList<>();
-        // TODO leer alumnos del archivo
-
-        return null;
+        try {
+            raf.seek(0);
+            String linea;
+            while ((linea = raf.readLine()) != null) {
+                if (linea.trim().isEmpty()) continue;
+                Alumno alumno = AlumnoUtils.string2Alumno(linea);
+                if (all || alumno.getEstado() != 'B') {
+                    alumnos.add(alumno);
+                }
+            }
+        } catch (IOException ex) {
+            Logger.getLogger(AlumnoDAOTXT.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error I/O: " + ex.getLocalizedMessage());
+        } catch (DniInvalidoException |
+                 FechaInvalidaException |
+                 EstadoInvalidoException |
+                 NombreApellidoInvalidoException |
+                 CantidadMateriasInvalidaException |
+                 PromedioInvalidoException ex) {
+            Logger.getLogger(AlumnoDAOTXT.class.getName()).log(Level.SEVERE, null, ex);
+            throw new DAOException("Error al parsear línea: " + ex.getLocalizedMessage());
+        }
+        return alumnos;
     }
 
     @Override

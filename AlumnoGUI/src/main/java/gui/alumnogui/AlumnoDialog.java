@@ -127,7 +127,7 @@ public class AlumnoDialog extends javax.swing.JDialog {
 
         apellido.setText("Apellido:");
 
-        fecNac.setText("Fecha Ingreso:");
+        fecNac.setText("Fecha Nacimiento:");
 
         estado.setText("Estado:");
 

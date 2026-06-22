@@ -428,7 +428,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             Map<String, String> config = new HashMap<>();
             try {
                 config.put(TIPO_DAO, DAOFactory.TIPO_DAO_TXT);
-                config.put(FULLPATH, "alumnos.txt");
+                config.put(FULLPATH, chooser.getSelectedFile().getAbsolutePath());
                 daoTXT = (AlumnoDAOTXT) DAOFactory.createDAO(config);
                 dao = daoTXT;
 
@@ -465,7 +465,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             if (dto != null) {
                 try {
                     dao.update(AlumnoMapper.dto2Entity(dto));
-
+                    recargarAlumnos();
                 } catch (NombreApellidoInvalidoException
                         | DniInvalidoException
                         | FechaInvalidaException
@@ -474,6 +474,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
                         | EstadoInvalidoException
                         | DAOException ex) {
                     Logger.getLogger(AlumnoGUI.class.getName()).log(Level.SEVERE, null, ex);
+                    JOptionPane.showMessageDialog(this, ex.getLocalizedMessage(), "Error", JOptionPane.ERROR_MESSAGE);
                 }
             }
         } else {

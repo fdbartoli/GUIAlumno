@@ -9,7 +9,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>21</maven.compiler.source>
         <maven.compiler.target>21</maven.compiler.target>
-        <exec.mainClass>persona.MainPersona</exec.mainClass>
+        <exec.mainClass>persona.Alumno</exec.mainClass>
     </properties>
     <dependencies>
         <!-- Source: https://mvnrepository.com/artifact/org.apache.commons/commons-lang3 -->
