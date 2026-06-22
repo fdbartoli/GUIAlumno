@@ -283,8 +283,8 @@ public class AlumnoDialog extends javax.swing.JDialog {
         dto.setNombre(nombreTextField.getText().trim());
         dto.setApellido(nombreTextField1.getText().trim());
         dto.setEstado(radioActivo.isSelected() ? 'A' : 'B');
-        
-        
+        /*dto.setPromedio(Double.parseDouble(nombreTextField5.getText().trim()));
+        dto.setCantMatAprob(Short.parseShort(nombreTextField4.getText().trim()));*/
         
         Calendar calendarNac = fecIngDateChooser.getCalendar();
         Calendar calendarIng = fecIngDateChooser1.getCalendar();

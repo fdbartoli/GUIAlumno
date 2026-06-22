@@ -59,9 +59,9 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
             insertPrepareStatement.setDate(index++, DateUtils.localDate2SqlDate(alumno.getFecIng()));
             insertPrepareStatement.setDouble(index++, alumno.getPromedio());
             
-            int estado = (alumno.getEstado() == 'A') ? 1 : 0;
-            insertPrepareStatement.setInt(index++, estado);
-
+           
+            insertPrepareStatement.setShort(index++, alumno.getCantMatAprob());
+            insertPrepareStatement.setString(index++, String.valueOf(alumno.getEstado()));
             insertPrepareStatement.execute();
         } catch (SQLException ex) {
             Logger.getLogger(AlumnoDAOSQL.class.getName()).log(Level.SEVERE, null, ex);
