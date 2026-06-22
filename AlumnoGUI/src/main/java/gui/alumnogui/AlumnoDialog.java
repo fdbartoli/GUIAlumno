@@ -320,6 +320,8 @@ public class AlumnoDialog extends javax.swing.JDialog {
 
         dto.setFecIng(fecIng);
         dto.setFecNac(fecNac);
+        dto.setPromedio(Double.parseDouble(nombreTextField5.getText().trim().replace(",", ".")));
+        dto.setCantMatAprob(Short.parseShort(nombreTextField4.getText().trim()));
         
     /*    try {
         dto.setFecNac(fecNac);
