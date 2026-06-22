@@ -55,7 +55,9 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
             insertPrepareStatement.setDate(index++, DateUtils.localDate2SqlDate(alumno.getFecNac()));
             insertPrepareStatement.setDate(index++, DateUtils.localDate2SqlDate(alumno.getFecIng()));
             insertPrepareStatement.setDouble(index++, alumno.getPromedio());
-            insertPrepareStatement.setString(index++, String.valueOf(alumno.getEstado()));
+            
+            int estado = (alumno.getEstado() == 'A') ? 1 : 0;
+            insertPrepareStatement.setInt(index++, estado);
 
             insertPrepareStatement.execute();
         } catch (SQLException ex) {
@@ -76,7 +78,7 @@ public class AlumnoDAOSQL extends DAO<Alumno, Integer> {
                 alu.setApellido(rs.getString("APELLIDO"));
                 alu.setFecIng(DateUtils.sqlDate2LocalDate(rs.getDate("FECING")));
                 alu.setPromedio(rs.getDouble("PROMEDIO"));
-
+         
                 return alu;
             }
         } catch (SQLException ex) {
