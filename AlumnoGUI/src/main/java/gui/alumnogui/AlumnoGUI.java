@@ -428,7 +428,7 @@ public class AlumnoGUI extends javax.swing.JFrame {
             Map<String, String> config = new HashMap<>();
             try {
                 config.put(TIPO_DAO, DAOFactory.TIPO_DAO_TXT);
-                config.put(FULLPATH, "alumnos.txt");
+                config.put(FULLPATH, chooser.getSelectedFile().getAbsolutePath());
                 daoTXT = (AlumnoDAOTXT) DAOFactory.createDAO(config);
                 dao = daoTXT;
 

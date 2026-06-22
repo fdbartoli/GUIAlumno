@@ -1,4 +1,26 @@
-/persona/target/
-/TestDAO/target/
-/DAO/target/
-/AlumnoGUI/target/
+# NetBeans / Eclipse IDE
+.project
+.classpath
+.settings/
+.nbproject/
+nbproject/private/
+nbactions.xml
+
+# Compiled output
+bin/
+build/
+dist/
+target/
+*.class
+*.jar
+
+# Claude Code
+.claude/
+
+# Windows
+Thumbs.db
+Desktop.ini
+*.lnk
+
+# Logs
+*.log
